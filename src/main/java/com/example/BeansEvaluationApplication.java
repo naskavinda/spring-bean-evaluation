@@ -20,7 +20,7 @@ public class BeansEvaluationApplication {
 
     public static void main(String[] args) {
         var start = System.nanoTime();
-        one();
+        two();
         var stop = System.nanoTime();
         var elapsed = (stop - start) / 1_000_000_000.0;
         System.out.println("Elapsed time: " + elapsed + "s");
@@ -56,6 +56,11 @@ public class BeansEvaluationApplication {
 
     private static void one() {
         var xml = new ClassPathXmlApplicationContext("beans-1.xml");
+        exercise(xml);
+    }
+
+    private static void two() {
+        var xml = new ClassPathXmlApplicationContext("beans-2.xml");
         exercise(xml);
     }
 
