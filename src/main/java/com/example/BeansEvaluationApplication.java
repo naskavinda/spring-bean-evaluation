@@ -66,6 +66,12 @@ public class BeansEvaluationApplication {
 
 }
 
+
+/**
+ * InitializingBeam == @PostConstruct
+ * DisposableBean == @PreDestroy
+ *
+ */
 @Service
 class CustomerService implements InitializingBean {
 
