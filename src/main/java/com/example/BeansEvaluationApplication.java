@@ -1,6 +1,7 @@
 package com.example;
 
 import org.postgresql.Driver;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -20,7 +21,7 @@ public class BeansEvaluationApplication {
 
     public static void main(String[] args) {
         var start = System.nanoTime();
-        two();
+        three();
         var stop = System.nanoTime();
         var elapsed = (stop - start) / 1_000_000_000.0;
         System.out.println("Elapsed time: " + elapsed + "s");
@@ -64,6 +65,11 @@ public class BeansEvaluationApplication {
         exercise(xml);
     }
 
+    private static void three() {
+        var xml = new ClassPathXmlApplicationContext("beans-3.xml");
+        exercise(xml);
+    }
+
     static void exercise(ApplicationContext applicationContext) {
         var cs = applicationContext.getBean(CustomerService.class);
         for (Customer customer : cs.getCustomers()) {
@@ -104,4 +110,32 @@ class CustomerService implements InitializingBean {
 
 record Customer(Integer id, String name) {
 
+}
+
+class JdbcClientFactoryBean implements FactoryBean<JdbcClient> {
+    private String url, username, password;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public JdbcClient getObject() throws Exception {
+        var driver = new Driver();
+        var simpleDriverDataSource = new SimpleDriverDataSource(driver, url, username, password);
+        return JdbcClient.create(simpleDriverDataSource);
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return JdbcClient.class;
+    }
 }
