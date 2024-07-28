@@ -21,7 +21,7 @@ public class BeansEvaluationApplication {
 
     public static void main(String[] args) {
         var start = System.nanoTime();
-        three();
+        four();
         var stop = System.nanoTime();
         var elapsed = (stop - start) / 1_000_000_000.0;
         System.out.println("Elapsed time: " + elapsed + "s");
@@ -67,6 +67,11 @@ public class BeansEvaluationApplication {
 
     private static void three() {
         var xml = new ClassPathXmlApplicationContext("beans-3.xml");
+        exercise(xml);
+    }
+
+    private static void four() {
+        var xml = new ClassPathXmlApplicationContext("beans-4.xml");
         exercise(xml);
     }
 
